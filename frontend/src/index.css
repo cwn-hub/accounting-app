@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  background-color: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none; /* Prevent pull-to-refresh on mobile */
+}
+
+/* Custom scrollbar for tables */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Mobile-specific touch improvements */
+@layer utilities {
+  /* Minimum touch target of 44px */
+  .min-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent text selection on interactive elements */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Smooth scrolling with momentum on iOS */
+  .momentum-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Hide scrollbar but keep functionality */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Safe area insets for notched devices */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+}
+
+/* Form input improvements for mobile */
+input, select, textarea {
+  font-size: 16px; /* Prevent iOS zoom on focus */
+}
+
+/* Number input styling for mobile */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Date picker styling */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Bottom sheet animation */
+.bottom-sheet-enter {
+  transform: translateY(100%);
+}
+
+.bottom-sheet-enter-active {
+  transform: translateY(0);
+  transition: transform 0.3s ease-out;
+}
+
+.bottom-sheet-exit {
+  transform: translateY(0);
+}
+
+.bottom-sheet-exit-active {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in;
+}
+
+/* Mobile card view styles */
+@layer components {
+  .mobile-card {
+    @apply bg-white rounded-lg shadow-sm border border-slate-200 p-4;
+  }
+  
+  .mobile-card-header {
+    @apply flex items-center justify-between mb-3 pb-3 border-b border-slate-100;
+  }
+  
+  .mobile-card-row {
+    @apply flex justify-between items-center py-2;
+  }
+  
+  .mobile-card-label {
+    @apply text-sm text-slate-500;
+  }
+  
+  .mobile-card-value {
+    @apply text-sm font-medium text-slate-900;
+  }
+}
+
+/* Prevent zoom on double tap */
+button, a, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* PWA standalone mode adjustments */
+@media (display-mode: standalone) {
+  body {
+    /* Add padding for status bar in standalone mode */
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  
+  /* Ensure bottom navigation is visible above home indicator */
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* Landscape mode adjustments for mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .bottom-nav {
+    display: none;
+  }
+  
+  .mobile-header-compact {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}

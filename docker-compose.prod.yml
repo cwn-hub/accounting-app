@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:8000"
+    volumes:
+      - ./data:/data
+      - ./backups:/backups
+      - ./uploads:/uploads
+    environment:
+      - DATABASE_URL=sqlite:///./data/accounting.db
+      - SECRET_KEY=c7dcc6221e4af75f2dd8314959fe4683f1f2a83938871e656742d1c68c207731
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - ALLOWED_ORIGINS=https://accounting.coown.foundation,http://localhost:5173,http://localhost:3000
+      - DEFAULT_CURRENCY=CHF
+      - TAX_JURISDICTION=CH
+      - ENABLE_QR_IBAN=true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
